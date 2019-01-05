@@ -3,13 +3,13 @@ jobs:
   build:
     machine:
       docker_layer_caching: true
-   steps:
+    steps:
      - checkout
      - run:
-       name: set docker daemon to experimental
-       command: |
-            sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
-            sudo service docker restart
+         name: set docker daemon to experimental
+         command: |
+              sudo sh -c 'echo '\''DOCKER_OPTS="--experimental=true"'\'' >> /etc/default/docker'
+              sudo service docker restart
      - run: |
          docker login -u $DOCKER_USER -p $DOCKER_PASS
 
