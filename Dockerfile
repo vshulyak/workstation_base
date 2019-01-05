@@ -7,6 +7,15 @@ FROM phusion/baseimage:0.10.2
 # https://gitlab.com/nvidia/cuda/blob/ubuntu16.04/9.2/base/Dockerfile
 # https://gitlab.com/nvidia/cuda/blob/ubuntu16.04/9.2/runtime/cudnn7/Dockerfile
 
+# Build-time metadata as defined at http://label-schema.org
+ARG BUILD_DATE
+ARG VCS_REF
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.name="Workstation Base" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/vshulyak/workstation_base" \
+      org.label-schema.schema-version="1.0"
+
 CMD ["/sbin/my_init"]
 
 ENV LC_ALL en_US.UTF-8
