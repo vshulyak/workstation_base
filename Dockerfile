@@ -18,7 +18,7 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
 
 ENV LC_ALL=en_US.UTF-8 \
     CUDA_VERSION=9.2.148 \
-    CUDA_PKG_VERSION=9-2=$CUDA_VERSION-1 \
+    CUDA_PKG_VERSION="9-2=9.2.148" \
     CUDNN_VERSION=7.4.1.5 \
     MINICONDA3_VERSION=4.5.12 \
     GOOFYS_VERSION=v0.19.0
@@ -66,8 +66,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV MKL_THREADING_LAYER=GNU \
-    PATH=$PATH:/opt/conda/bin \
-    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH} \
+    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/opt/conda/bin:${PATH} \
     LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda-9.2/targets/x86_64-linux/include/ \
     NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility \
