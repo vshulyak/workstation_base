@@ -16,14 +16,12 @@ LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://github.com/vshulyak/workstation_base" \
       org.label-schema.schema-version="1.0"
 
-CMD ["/sbin/my_init"]
-
-ENV LC_ALL en_US.UTF-8
-ENV CUDA_VERSION 9.2.148
-ENV CUDA_PKG_VERSION 9-2=$CUDA_VERSION-1
-ENV CUDNN_VERSION 7.4.1.5
-ENV MINICONDA3_VERSION 4.5.12
-ENV GOOFYS_VERSION v0.19.0
+ENV LC_ALL=en_US.UTF-8 \
+    CUDA_VERSION=9.2.148 \
+    CUDA_PKG_VERSION=9-2=$CUDA_VERSION-1 \
+    CUDNN_VERSION=7.4.1.5 \
+    MINICONDA3_VERSION=4.5.12 \
+    GOOFYS_VERSION=v0.19.0
 
 # Additional PPAs for Node (for Jupyter plugins) and Java (for Scala/Spark)
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
@@ -67,14 +65,10 @@ RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efac
 RUN rm -rf /var/lib/apt/lists/* && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-
-ENV MKL_THREADING_LAYER=GNU
-ENV PATH=$PATH:/opt/conda/bin
-
-ENV PATH /usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
-ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda-9.2/targets/x86_64-linux/include/
-
-# nvidia-container-runtime
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
-ENV NVIDIA_REQUIRE_CUDA "cuda>=9.2"
+ENV MKL_THREADING_LAYER=GNU \
+    PATH=$PATH:/opt/conda/bin \
+    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH} \
+    LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda-9.2/targets/x86_64-linux/include/ \
+    NVIDIA_VISIBLE_DEVICES=all \
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility \
+    NVIDIA_REQUIRE_CUDA="cuda>=9.2"
