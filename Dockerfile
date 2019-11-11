@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.2
+FROM phusion/baseimage:0.11
 #
 # !Use squash build!
 # It's imperative that you use squash build as the image is optimized for readability
@@ -20,18 +20,15 @@ ENV LC_ALL=en_US.UTF-8 \
     CUDA_VERSION=9.2.148 \
     CUDA_PKG_VERSION="9-2=9.2.148-1" \
     CUDNN_VERSION=7.4.1.5 \
-    MINICONDA3_VERSION=4.5.12 \
-    GOOFYS_VERSION=v0.19.0
+    MINICONDA3_VERSION=4.7.12.1 \
+    GOOFYS_VERSION=v0.22.0
 
 # Additional PPAs for Node (for Jupyter plugins) and Java (for Scala/Spark)
-RUN curl -sL https://deb.nodesource.com/setup_11.x | bash - && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
-    add-apt-repository -y ppa:webupd8team/java
-
+RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
 
 # Basics needed further on in derivative images (do not cleanup up just yet)
 RUN apt-get update && \
-    apt-get install -y nodejs wget curl vim fuse build-essential gfortran git oracle-java8-installer graphviz
+    apt-get install -y nodejs wget curl vim fuse build-essential gfortran git openjdk-11-jdk graphviz
 
 
 # Install Miniconda3 (do not cleanup up just yet)
@@ -46,13 +43,9 @@ RUN wget https://github.com/kahing/goofys/releases/download/$GOOFYS_VERSION/goof
     chmod u+x /usr/bin/goofys
 
 # CUDA + CUDNN for running DL
-RUN NVIDIA_GPGKEY_SUM=d1be581509378368edeec8c1eb2958702feedf3bc3d17011adbf24efacce4ab5 && \
-    NVIDIA_GPGKEY_FPR=ae09fe4bbd223a84b2ccfce3f60f4b3d7fa2af80 && \
-    apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub && \
-    apt-key adv --export --no-emit-version -a $NVIDIA_GPGKEY_FPR | tail -n +5 > cudasign.pub && \
-    echo "$NVIDIA_GPGKEY_SUM  cudasign.pub" | sha256sum -c --strict - && rm cudasign.pub && \
-    echo "deb http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
-    echo "deb http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
+RUN curl -fsSL https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1710/x86_64/7fa2af80.pub | apt-key add - && \
+    echo "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1710/x86_64 /" > /etc/apt/sources.list.d/cuda.list && \
+    echo "deb https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1604/x86_64 /" > /etc/apt/sources.list.d/nvidia-ml.list && \
     apt-get update && apt-get install -y --no-install-recommends \
         cuda-cudart-$CUDA_PKG_VERSION && \
     ln -s cuda-9.2 /usr/local/cuda && \
