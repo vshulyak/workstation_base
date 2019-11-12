@@ -28,7 +28,7 @@ RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
 
 # Basics needed further on in derivative images (do not cleanup up just yet)
 RUN apt-get update && \
-    apt-get install -y nodejs wget curl vim fuse build-essential gfortran git openjdk-11-jdk graphviz
+    apt-get install -y nodejs wget curl vim fuse build-essential gfortran git openjdk-11-jdk graphviz gcc-multilib g++-multilib
 
 
 # Install Miniconda3 (do not cleanup up just yet)
